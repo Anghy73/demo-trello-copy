@@ -15,6 +15,12 @@ export function TaskProvider ({ children }) {
     type: 'UPDATE_TASK',
     payload: product
   })
+
+  const delTask = product => dispatch({
+    type: 'DELETE_TASK',
+    payload: product
+  })
+
   const dropTask = product => dispatch({
     type: 'DROP_TASK',
     payload: product
@@ -25,7 +31,8 @@ export function TaskProvider ({ children }) {
       tasks: state,
       addTask,
       updateTask,
-      dropTask
+      dropTask,
+      delTask
     }}
     >
       {children}

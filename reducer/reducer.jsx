@@ -1,27 +1,14 @@
-export const reducerInitialState = [
-  {
-    id: 1,
-    description: 'Realizar una copia de Trello',
-    list: 1
-  },
-  {
-    id: 2,
-    description: 'Realizar los funcionalidades de la copia de Trello',
-    list: 1
-  },
-  {
-    id: 3,
-    description: 'Realizar los estilos de la copia de Trello',
-    list: 1
-  }
-]
+export const reducerInitialState = JSON.parse(window.localStorage.getItem('tasks')) || []
+
+const updateLocalStorage = list => {
+  window.localStorage.setItem('tasks', JSON.stringify(list))
+}
 
 export const reducer = (state, action) => {
   const { type: actionType, payload: actionPayload } = action
 
   switch (actionType) {
     case 'ADD_TASK': {
-      console.log('add')
       const newState = [
         ...state,
         {
@@ -31,11 +18,12 @@ export const reducer = (state, action) => {
         }
       ]
 
+      updateLocalStorage(newState)
+
       return newState
     }
 
     case 'UPDATE_TASK': {
-      console.log('update')
       const { id } = actionPayload.item
       const newState = state.map(item => {
         if (item.id === id) {
@@ -43,19 +31,31 @@ export const reducer = (state, action) => {
         }
         return item
       })
+
+      updateLocalStorage(newState)
+
       return newState
     }
 
     case 'DROP_TASK': {
-      console.log('drop')
       const item = state.find(task => task.id === +actionPayload.itemID)
-      console.log(actionPayload.list)
       item.list = actionPayload.list
 
       const newState = state.map(task => {
         if (task.id === item.id) return item
         return task
       })
+
+      updateLocalStorage(newState)
+
+      return newState
+    }
+
+    case 'DELETE_TASK': {
+      const { id } = actionPayload
+      const newState = state.filter(item => item.id !== id)
+
+      updateLocalStorage(newState)
 
       return newState
     }

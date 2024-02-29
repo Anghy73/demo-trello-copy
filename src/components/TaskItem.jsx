@@ -1,8 +1,18 @@
+import { useState } from 'react'
 import useTask from '../hooks/useTask'
+import { HiOutlinePencil, HiOutlineTrash } from 'react-icons/hi'
 
 function TaskItem ({ task }) {
-  // const [value, setValue] = useState('')
-  const { updateTask } = useTask()
+  const [editEnable, setEditEnable] = useState(true)
+  const { updateTask, delTask } = useTask()
+
+  const handleClickEdit = () => {
+    setEditEnable(!editEnable)
+  }
+
+  const handleClickDel = () => {
+    delTask(task)
+  }
 
   const handleChangeDescription = (evt) => {
     const newValue = evt.target.value
@@ -14,9 +24,12 @@ function TaskItem ({ task }) {
   }
 
   return (
-    <div>
-      <input type='text' className='bg-emerald-700 px-2 py-2 rounded-md cursor-pointer inline-block w-full' value={task.description} draggable onDragStart={(evt) => startDrag(evt, task)} onChange={handleChangeDescription} />
-      {/* <li className='bg-emerald-700 px-2 py-2 rounded-md cursor-pointer' draggable onDragStart={(evt) => startDrag(evt, task)}>{task.description}</li> */}
+    <div className='bg-emerald-700 px-2 py-2 rounded-md cursor-pointer w-full flex justify-between' draggable onDragStart={(evt) => startDrag(evt, task)}>
+      <input type='text' className='focus-visible:outline-none flex-1 bg-transparent cursor-default mr-3' value={task.description} readOnly={editEnable} onChange={handleChangeDescription} />
+      <div className='flex gap-2'>
+        <HiOutlinePencil className='w-8 h-8 p-1' onClick={handleClickEdit} />
+        <HiOutlineTrash className='w-8 h-8 p-1' onClick={handleClickDel} />
+      </div>
     </div>
   )
 }

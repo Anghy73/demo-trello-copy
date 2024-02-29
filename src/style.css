@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  overflow-x: hidden;
+}
+
+body ul {
+  scrollbar-color: #047857 #000;
+  scrollbar-width: thin;
+  padding-right: .5rem;
+}
